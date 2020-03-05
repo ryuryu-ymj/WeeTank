@@ -6,8 +6,6 @@ import com.badlogic.gdx.math.Vector2
 import kotlin.math.atan2
 
 class Player : Tank() {
-    lateinit var touchPoint: Vector2
-
     init {
         setPosition(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)
     }
@@ -23,7 +21,6 @@ class Player : Tank() {
             Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) -> y -= speed
             Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) -> y += speed
         }
-        angle = atan2(touchPoint.y - y, touchPoint.x - x)
 
         super.act(delta)
     }

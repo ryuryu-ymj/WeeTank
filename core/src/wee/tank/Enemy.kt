@@ -5,7 +5,6 @@ import kotlin.math.atan2
 import kotlin.math.sqrt
 
 class Enemy : Tank() {
-    private var target = Vector2(0f, 0f)
     /** 弾を発射したいか否か */
     var wantToShot = false
     private var cnt = 0
@@ -25,15 +24,16 @@ class Enemy : Tank() {
         setPosition(x, y)
     }
 
-    fun decideAngle(player: Player, bullets: Array<Bullet>) {
+    fun decideTarget(player: Player, bullets: Array<Bullet>) {
         //近くに弾があれば狙う
         bullets.find { it.hasParent() && getDistance(x, y, it.x, it.y) < 500 }.let {
-            angle = if (it != null) {
-                atan2(it.y - y, it.x - x)
+            target = if (it != null) {
+                Vector2(it.x, it.y)
             } else { //なければプレイヤーを狙う
-                atan2(player.y - y, player.x - x)
+                Vector2(player.x, player.y)
             }
         }
+        //println("${player.x}, ${player.y}")
     }
 
     /** 二点間の距離 */

@@ -53,7 +53,7 @@ class WeeTank : ApplicationAdapter() {
 
         createFont()
 
-        player.touchPoint = touchPoint
+        player.target = touchPoint
     }
 
     override fun render() {
@@ -87,7 +87,7 @@ class WeeTank : ApplicationAdapter() {
         }
 
         enemies.forEach {
-            it.decideAngle(player, bullets)
+            it.decideTarget(player, bullets)
             if (it.wantToShot) it.run { newBullet(x, y, angle) }
         }
 
