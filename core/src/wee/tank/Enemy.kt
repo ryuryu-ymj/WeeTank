@@ -1,14 +1,8 @@
 package wee.tank
 
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.Actor
 import kotlin.math.atan2
 import kotlin.math.sqrt
-import kotlin.random.Random
 
 class Enemy : Tank() {
     private var target = Vector2(0f, 0f)
