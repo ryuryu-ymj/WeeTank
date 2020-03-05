@@ -79,8 +79,11 @@ class WeeTank : ApplicationAdapter() {
         stage.act()
 
         target.setPosition(touchPoint.x, touchPoint.y)
-        if (Gdx.input.justTouched() && player.hasParent()) {
-            player.run { newBullet(x, y, angle) }
+        if (Gdx.input.justTouched() && player.hasParent() && player.canShoot()) {
+            player.run {
+                newBullet(x, y, angle)
+                shoot()
+            }
         }
 
         enemies.forEach {

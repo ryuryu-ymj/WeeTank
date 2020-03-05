@@ -20,6 +20,18 @@ class Player : Actor() {
     /** 砲台の角度<p>
      * 三時の方向から反時計回りにラジアン */
     var angle = 0f
+    /** 直近の弾を打ってからの経過時間 */
+    private var noShootTime = 0
+    /**
+     * 所持する弾の数<p>
+     * 一定時間打たないと回復する
+     */
+    private var bulletCnt = BULLET_CNT_MAX
+    companion object {
+        const val BULLET_CNT_MAX = 5
+        const val CANT_SHOOT_TIME = 10
+        const val RECOVER_BULLET_TIME = 30
+    }
 
     init {
         /* 拡大・縮小時も滑らかにする. */
@@ -43,6 +55,9 @@ class Player : Actor() {
             Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) -> y += speed
         }
 
+        noShootTime++
+        if (noShootTime > RECOVER_BULLET_TIME) bulletCnt = BULLET_CNT_MAX
+
         angle = atan2(touchPoint.y - y, touchPoint.x - x)
 
         rect.set(x - width / 2 + 10, y - height / 2 + 10, width - 20, height - 20)
@@ -56,4 +71,17 @@ class Player : Actor() {
             draw(textureGun, x - width / 2, y - height / 2, width / 2, height / 2, width, height, 1f, 1f, Math.toDegrees(angle.toDouble()).toFloat())
         }
     }
+
+    /**
+     * 弾を打った時に呼び出す処理
+     */
+    fun shoot() {
+        noShootTime = 0
+        bulletCnt--
+    }
+
+    /**
+     * 弾を打てるか否か
+     */
+    fun canShoot() = (noShootTime > CANT_SHOOT_TIME && bulletCnt != 0)
 }
