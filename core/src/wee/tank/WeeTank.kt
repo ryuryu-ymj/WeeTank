@@ -84,7 +84,7 @@ class WeeTank : ApplicationAdapter() {
         }
 
         enemies.forEach {
-            it.decideAngle(player)
+            it.decideAngle(player, bullets)
             if (it.wantToShot) it.run { newBullet(x, y, angle) }
         }
 

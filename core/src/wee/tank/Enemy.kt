@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import kotlin.math.atan2
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 class Enemy : Actor() {
@@ -35,7 +36,7 @@ class Enemy : Actor() {
 
     override fun act(delta: Float) {
         if (wantToShot) wantToShot = false
-        if (cnt % 120 == 0) wantToShot = true
+        if (cnt % 60 == 0) wantToShot = true
 
         rect.set(x - width / 2 + 10, y - height / 2 + 10, width - 20, height - 20)
         cnt++
@@ -58,7 +59,17 @@ class Enemy : Actor() {
         setPosition(x, y)
     }
 
-    fun decideAngle(player: Player) {
-        //angle = atan2(player.y - y, player.x - x)
+    fun decideAngle(player: Player, bullets: Array<Bullet>) {
+        //近くに弾があれば狙う
+        bullets.find { it.hasParent() && getDistance(x, y, it.x, it.y) < 500 }.let {
+            angle = if (it != null) {
+                atan2(it.y - y, it.x - x)
+            } else { //なければプレイヤーを狙う
+                atan2(player.y - y, player.x - x)
+            }
+        }
     }
+
+    /** 二点間の距離 */
+    private fun getDistance(x1: Float, y1: Float, x2: Float, y2: Float) = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 }
