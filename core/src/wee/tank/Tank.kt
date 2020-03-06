@@ -16,12 +16,9 @@ open class Tank : Actor() {
     private val textureGun = TextureRegion(Texture("tank_gun.png"))
     /** 衝突判定用の枠 */
     var rect = Rectangle()
-    /** 弾を狙う座標 */
-    var target = Vector2(0f, 0f)
     /** 弾を打つ方向<p>
      * 三時の方向から反時計回りにラジアン */
     var angle = 0f
-        private set
     /** 直近の弾を打ってからの経過時間 */
     private var noShootTime = 0
     /**
@@ -51,8 +48,6 @@ open class Tank : Actor() {
         noShootTime++
         if (noShootTime > RECOVER_BULLET_TIME) bulletCnt = BULLET_CNT_MAX
 
-
-        angle = atan2(target.y - y, target.x - x)
         rect.set(x - width / 2 + 10, y - height / 2 + 10, width - 20, height - 20)
     }
 

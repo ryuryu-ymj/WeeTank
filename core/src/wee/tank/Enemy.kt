@@ -1,17 +1,19 @@
 package wee.tank
 
 import com.badlogic.gdx.math.Vector2
+import kotlin.math.PI
+import kotlin.math.atan2
 import kotlin.math.sqrt
 
 class Enemy : Tank() {
     /** 弾を発射したいか否か */
     var wantShoot = false
     /** 目的地 */
-    private var destination = Vector2(800f, 800f)
+    var destination = Vector2(1000f, 100f)
     private var cnt = 0
 
     override fun act(delta: Float) {
-        if (wantShoot) wantShoot = false
+        //if (wantShoot) wantShoot = false
         //if (cnt % 60 == 0) wantShoot = true
 
         val direction = destination.cpy().sub(x, y)
@@ -37,21 +39,28 @@ class Enemy : Tank() {
      * playerやbulletの位置からtargetと動きを決める
      */
     fun decideTargetAndMovement(player: Player, bullets: Array<Bullet>) {
-        //最も近い弾をよける
-        bullets.minBy {
+        bullets.filter {
+            it.hasParent()
+        }.minBy {
             getDistanceFromBullet(it)
         }?.let { bullet ->
             val l = Vector2(x - bullet.x, y - bullet.y)
             val d = Vector2(1f, 0f).rotateRad(bullet.angle)
-            //println(d)
-            val d2 = d.scl(l.dot(d))
+            val d2 = d.cpy().scl(l.dot(d))
             /** tankからbulletの弾道への垂線ベクトル */
-            val h = d2.sub(l)
-            if (h.len() < 100) {
+            val h = d2.cpy().sub(l)
+            if (h.len() < 70 && l.dot(d) > 0) {
                 //println("$h")
-                destination = Vector2(x, y).sub(h.setLength(h.len() - 100))
+                //destination = Vector2(x, y).sub(h.setLength(h.len() - 70)) //最も近くかつ当たる弾をよける
+                val bulletToTank = atan2(y - bullet.y, x - bullet.x)
+                angle = bulletToTank * 2 - bullet.angle + PI.toFloat()
+                wantShoot = true
                 return
+            } else {
+                wantShoot = false
             }
+
+
             /*target = if (it != null) {
                 Vector2(it.x, it.y)
             } else { //なければプレイヤーを狙う

@@ -35,7 +35,6 @@ class Bullet : Actor() {
         }
 
         rect.set(x - width / 2 + 2, y - height / 2 + 5, width - 4, height - 10)
-        //println(rectangle.x)
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {

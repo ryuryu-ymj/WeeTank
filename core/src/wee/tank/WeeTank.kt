@@ -88,10 +88,14 @@ class WeeTank : ApplicationAdapter() {
             }
         }
 
+        //enemyが弾を打つ
         enemies.forEach {
             if (it.hasParent()) {
                 it.decideTargetAndMovement(player, bullets)
-                if (it.wantShoot && it.canShoot()) it.run { newBullet(x, y, angle) }
+                if (it.wantShoot && it.canShoot()) it.run {
+                    newBullet(x, y, angle)
+                    shoot()
+                }
             }
         }
 
