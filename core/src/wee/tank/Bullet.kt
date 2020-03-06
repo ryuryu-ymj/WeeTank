@@ -14,7 +14,8 @@ class Bullet : Actor() {
     var rect = Rectangle()
 
     /** 弾丸の方向 三時の方向から反時計回りにラジアン */
-    private var angle = 0f
+    var angle = 0f
+        private set
 
     init {
         width = texture.regionWidth.toFloat()

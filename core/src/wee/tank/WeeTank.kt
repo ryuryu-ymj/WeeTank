@@ -79,6 +79,8 @@ class WeeTank : ApplicationAdapter() {
         stage.act()
 
         target.setPosition(touchPoint.x, touchPoint.y)
+
+        //playerが弾を打つ
         if (Gdx.input.justTouched() && player.hasParent() && player.canShoot()) {
             player.run {
                 newBullet(x, y, angle)
@@ -87,8 +89,10 @@ class WeeTank : ApplicationAdapter() {
         }
 
         enemies.forEach {
-            it.decideTarget(player, bullets)
-            if (it.wantToShot) it.run { newBullet(x, y, angle) }
+            if (it.hasParent()) {
+                it.decideTargetAndMovement(player, bullets)
+                if (it.wantShoot && it.canShoot()) it.run { newBullet(x, y, angle) }
+            }
         }
 
         //衝突判定
