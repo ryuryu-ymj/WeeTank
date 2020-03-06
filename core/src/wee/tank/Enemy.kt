@@ -7,14 +7,14 @@ class Enemy : Tank() {
     /** 弾を発射したいか否か */
     var wantShoot = false
     /** 目的地 */
-    var destination = Vector2(800f, 800f)
+    private var destination = Vector2(800f, 800f)
     private var cnt = 0
 
     override fun act(delta: Float) {
         if (wantShoot) wantShoot = false
         //if (cnt % 60 == 0) wantShoot = true
 
-        var direction = destination.cpy().sub(x, y)
+        val direction = destination.cpy().sub(x, y)
         if (direction.len() >= MOVE_SPEED) {
             direction.setLength(MOVE_SPEED.toFloat()).run { moveBy(x, y) }
         } else {
