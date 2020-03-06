@@ -22,13 +22,22 @@ class EnemyType1: Enemy() {
             /** tankからbulletの弾道への垂線ベクトル */
             val h = d2.cpy().sub(l)
             if (h.len() < 70 && l.dot(d) > 0 && l.len() < 400) {
-                val bulletToTank = atan2(y - bullet.y, x - bullet.x)
-                angle = bulletToTank * 2 - bullet.angle + PI.toFloat()//最も近くかつ当たる弾を打ち返す
-                wantShoot = true
+                if ((0..15).random() == 0) {
+                    val bulletToTank = atan2(y - bullet.y, x - bullet.x)
+                    angle = bulletToTank * 2 - bullet.angle + PI.toFloat()//最も近くかつ当たる弾を打ち返す
+                    wantShoot = true
+                }
                 return
             } else {
                 wantShoot = false
             }
+        }
+
+        angle = atan2(player.y - y, player.x - x)
+        wantShoot = when {
+            wantShoot -> false
+            (0..300).random() == 0 -> true //ときたまplayerを狙ってくる
+            else -> false
         }
     }
 }
