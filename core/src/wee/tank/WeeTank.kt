@@ -43,8 +43,12 @@ class WeeTank : ApplicationAdapter() {
 
         player = Player()
         stage.addActor(player)
-        enemies = Array(1) { Enemy().apply { activate(100f, 100f + it * 100) } }
-        enemies.forEach { stage.addActor(it) }
+        enemies = arrayOf(EnemyType1(), EnemyType2())
+        enemies[0].activate(100f, 100f)
+        enemies[1].activate(100f, 500f)
+        enemies.forEach {
+            stage.addActor(it)
+        }
         bullets = Array(50) { Bullet() }
         stage.addActor(bulletsGroup)
         //stage.addActor(enemiesGroup)
