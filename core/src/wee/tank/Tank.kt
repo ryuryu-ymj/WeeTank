@@ -29,7 +29,6 @@ open class Tank : Actor() {
      * 一定時間打たないと回復する
      */
     private var bulletCnt = BULLET_CNT_MAX
-
     /**
      * 弾を打てるか否かを管理するための調製用の定数
      */
@@ -41,6 +40,7 @@ open class Tank : Actor() {
         /** 弾の装填にかかる時間 */
         const val RECOVER_BULLET_TIME = 30
     }
+    val MOVE_SPEED = 3
 
     init {
         /* 拡大・縮小時も滑らかにする. */

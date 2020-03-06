@@ -107,7 +107,9 @@ class WeeTank : ApplicationAdapter() {
                     player.remove()
                     println("player die")
                 }
-                bullets.find { it.hasParent() && it != bullet && bullet.rect.overlaps(it.rect) }?.let {
+                bullets.find {
+                    it.hasParent() && it != bullet && bullet.rect.overlaps(it.rect)
+                }?.let {
                     bullet.remove()
                     it.remove()
                     println("bullets collide with each other")
