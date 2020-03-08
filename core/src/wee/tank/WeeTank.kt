@@ -31,6 +31,7 @@ class WeeTank : ApplicationAdapter() {
     private lateinit var player: Player
     private lateinit var target: Target
     private lateinit var enemies: Array<Enemy>
+
     //private val enemiesGroup = Group()
     private lateinit var bullets: Array<Bullet>
     private val bulletsGroup = Group()
@@ -44,8 +45,8 @@ class WeeTank : ApplicationAdapter() {
         player = Player()
         stage.addActor(player)
         enemies = arrayOf(EnemyType1(), EnemyType2())
-        enemies[0].activate(100f, 100f)
-        enemies[1].activate(100f, 500f)
+        enemies[0].activate(100f, 500f)
+        enemies[1].activate(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)
         enemies.forEach {
             stage.addActor(it)
         }

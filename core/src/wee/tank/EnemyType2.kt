@@ -13,6 +13,7 @@ class EnemyType2 : Enemy() {
             val l = Vector2(x - bullet.x, y - bullet.y)
             val d = Vector2(1f, 0f).rotateRad(bullet.angle)
             val d2 = d.cpy().scl(l.dot(d))
+
             /** tankからbulletの弾道への垂線ベクトル */
             val h = d2.cpy().sub(l)
             if (h.len() < 70 && l.dot(d) > 0 && l.len() < 400) {
@@ -29,5 +30,13 @@ class EnemyType2 : Enemy() {
             (0..200).random() == 0 -> true //ときたまplayerを狙ってくる
             else -> false
         }
+
+        if (isReachDestination) {
+            if ((0..100).random() == 0)
+            {
+                destination.add(100f * (-2..2).random(), 100f * (-2..2).random()) // 適当に動く
+            }
+        }
+
     }
 }

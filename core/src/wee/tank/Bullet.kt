@@ -24,8 +24,7 @@ class Bullet : Actor() {
         setPosition(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)
     }
 
-    fun dispose()
-    {
+    fun dispose() {
         texture.texture.dispose()
     }
 
