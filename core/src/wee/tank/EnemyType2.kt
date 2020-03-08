@@ -3,7 +3,7 @@ package wee.tank
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.atan2
 
-class EnemyType2 : Enemy() {
+class EnemyType2(x: Float, y: Float) : Enemy(x, y) {
     override fun decideTargetAndMovement(player: Player, bullets: Array<Bullet>) {
         bullets.filter {
             it.hasParent()

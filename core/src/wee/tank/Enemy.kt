@@ -2,7 +2,7 @@ package wee.tank
 
 import com.badlogic.gdx.math.Vector2
 
-abstract class Enemy : Tank() {
+abstract class Enemy(x: Float, y: Float) : Tank() {
     /** 弾を発射したいか否か */
     var wantShoot = false
 
@@ -11,6 +11,11 @@ abstract class Enemy : Tank() {
     var isReachDestination = true
         get() = destination.epsilonEquals(x, y)
         private set
+
+    init {
+        setPosition(x, y)
+        destination.set(x, y)
+    }
 
     override fun act(delta: Float) {
         //if (wantShoot) wantShoot = false
@@ -24,14 +29,6 @@ abstract class Enemy : Tank() {
         }
 
         super.act(delta)
-    }
-
-    /**
-     * 敵機の生成
-     */
-    fun activate(x: Float, y: Float) {
-        setPosition(x, y)
-        destination.set(x, y)
     }
 
     /**
