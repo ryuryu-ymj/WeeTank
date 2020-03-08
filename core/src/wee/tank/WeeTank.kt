@@ -131,6 +131,9 @@ class WeeTank : ApplicationAdapter() {
     }
 
     override fun dispose() {
+        player.dispose()
+        enemies.forEach { it.dispose() }
+        bullets.forEach { it.dispose() }
         batch.dispose()
         font.dispose()
     }

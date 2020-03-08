@@ -44,6 +44,12 @@ open class Tank : Actor() {
         height = textureBody.height.toFloat()
     }
 
+    fun dispose()
+    {
+        textureBody.dispose()
+        textureGun.texture.dispose()
+    }
+
     override fun act(delta: Float) {
         noShootTime++
         if (noShootTime > RECOVER_BULLET_TIME) bulletCnt = BULLET_CNT_MAX

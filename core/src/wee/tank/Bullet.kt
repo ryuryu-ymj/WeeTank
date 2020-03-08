@@ -24,6 +24,11 @@ class Bullet : Actor() {
         setPosition(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)
     }
 
+    fun dispose()
+    {
+        texture.texture.dispose()
+    }
+
     override fun act(delta: Float) {
         val d = 7
         x += d * cos(angle)
