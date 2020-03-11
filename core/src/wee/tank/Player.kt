@@ -8,8 +8,8 @@ import kotlin.math.atan2
 class Player : Tank() {
     var target = Vector2()
 
-    init {
-        setPosition(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)
+    fun init(x: Float, y: Float) {
+        setPosition(x, y)
     }
 
     override fun act(delta: Float) {

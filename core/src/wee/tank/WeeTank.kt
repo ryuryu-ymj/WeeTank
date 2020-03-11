@@ -16,8 +16,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import kotlin.math.cos
 import kotlin.math.sin
 
-const val STAGE_WIDTH = 1920f
-const val STAGE_HEIGHT = 1080f
+const val STAGE_WIDTH = 3200f
+const val STAGE_HEIGHT = 1800f
 
 class WeeTank : ApplicationAdapter() {
     private lateinit var stage: Stage
@@ -31,7 +31,7 @@ class WeeTank : ApplicationAdapter() {
 
     private lateinit var player: Player
     private lateinit var target: Target
-    private lateinit var enemies: Array<Enemy>
+    private val enemies = ArrayList<Enemy>()
     private lateinit var bullets: Array<Bullet>
     private val blocks = ArrayList<Block>()
     private val bulletsGroup = Group()
@@ -43,11 +43,11 @@ class WeeTank : ApplicationAdapter() {
         batch.projectionMatrix = stage.camera.combined
 
         player = Player()
-        stage.addActor(player)
-        enemies = arrayOf(/*EnemyType1(100f, 100f), EnemyType2(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)*/)
+        //stage.addActor(player)
+        /*enemies = arrayOf(/*EnemyType1(100f, 100f), EnemyType2(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)*/)
         enemies.forEach {
             stage.addActor(it)
-        }
+        }*/
         bullets = Array(50) { Bullet() }
         stage.addActor(bulletsGroup)
         /*blocks = arrayOf(Block(100f, 100f), Block(100f, 200f), Block(100f, 300f), Block(200f, 100f))
@@ -199,13 +199,21 @@ class WeeTank : ApplicationAdapter() {
         try {
             val file = Gdx.files.internal("stage1.txt")
             var x: Float
-            var y = STAGE_HEIGHT - 130
+            var y = STAGE_HEIGHT - 100
             file.reader().forEachLine { line ->
-                x = 60f
+                x = STAGE_WIDTH / 2 - 100 * 11
                 line.split(",").forEach { cell ->
                     when (cell) {
                         "00" -> Block(x, y).let {
                             blocks.add(it)
+                            stage.addActor(it)
+                        }
+                        "20" -> EnemyType1(x, y).let {
+                            enemies.add(it)
+                            stage.addActor(it)
+                        }
+                        "10" -> player.let {
+                            it.init(x, y)
                             stage.addActor(it)
                         }
                     }
