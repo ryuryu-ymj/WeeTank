@@ -8,7 +8,7 @@ import kotlin.math.atan2
  * 固定砲台タイプのtank
  */
 class EnemyType1(x: Float, y: Float): Enemy(x, y) {
-    override fun decideTargetAndMovement(player: Player, bullets: Array<Bullet>) {
+    override fun decideTargetAndMovement(player: Player, bullets: List<Bullet>) {
         bullets.filter {
             it.hasParent()
         }.minBy {

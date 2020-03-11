@@ -31,9 +31,9 @@ class WeeTank : ApplicationAdapter() {
 
     private lateinit var player: Player
     private lateinit var target: Target
-    private val enemies = ArrayList<Enemy>()
-    private lateinit var bullets: Array<Bullet>
-    private val blocks = ArrayList<Block>()
+    private val enemies = mutableListOf<Enemy>()
+    private lateinit var bullets: List<Bullet>
+    private val blocks = mutableListOf<Block>()
     private val bulletsGroup = Group()
 
     override fun create() {
@@ -48,7 +48,7 @@ class WeeTank : ApplicationAdapter() {
         enemies.forEach {
             stage.addActor(it)
         }*/
-        bullets = Array(50) { Bullet() }
+        bullets = List(50) { Bullet() }
         stage.addActor(bulletsGroup)
         /*blocks = arrayOf(Block(100f, 100f), Block(100f, 200f), Block(100f, 300f), Block(200f, 100f))
         blocks.forEach {
@@ -195,13 +195,12 @@ class WeeTank : ApplicationAdapter() {
     private fun readMission() {
         try {
             val file = Gdx.files.internal("stage1.txt")
-            var x: Float
-            var y = STAGE_HEIGHT - 100
-            file.reader().forEachLine { line ->
-                x = STAGE_WIDTH / 2 - 100 * 11
-                line.split(",").forEach { cell ->
+            for ((iy, line) in file.reader().readLines().withIndex()) {
+                for ((ix, cell) in line.chunked(2).withIndex()) {
+                    val x = STAGE_WIDTH / 2 - 1100 + ix * 100f
+                    val y = STAGE_HEIGHT / 2 + 800 - iy * 100f
                     when (cell) {
-                        "00" -> Block(x, y).let {
+                        "01" -> Block(x, y).let {
                             blocks.add(it)
                             stage.addActor(it)
                         }
@@ -214,9 +213,7 @@ class WeeTank : ApplicationAdapter() {
                             stage.addActor(it)
                         }
                     }
-                    x += 100
                 }
-                y -= 100
             }
         } catch (e: GdxRuntimeException) {
             println("ファイルの読み取りに失敗しました ${e.message}")
