@@ -5,11 +5,15 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.scenes.scene2d.Actor
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
 class Bullet : Actor() {
-    private val texture = TextureRegion(Texture("bullet.png"))
+    companion object {
+        private val texture = TextureRegion(Texture("bullet.png"))
+    }
+
     /** 衝突判定用の枠 */
     var rect = Rectangle()
 
@@ -25,6 +29,7 @@ class Bullet : Actor() {
     }
 
     fun dispose() {
+        clear()
         texture.texture.dispose()
     }
 
@@ -38,7 +43,7 @@ class Bullet : Actor() {
             remove()
         }
 
-        rect.set(x - width / 2 + 2, y - height / 2 + 5, width - 4, height - 10)
+        rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
@@ -55,5 +60,17 @@ class Bullet : Actor() {
     fun activate(x: Float, y: Float, angle: Float) {
         setPosition(x, y)
         this.angle = angle
+    }
+
+    fun reflect(wallIsVertical: Boolean, wallCoordinate: Float) {
+        if (wallIsVertical) {
+            angle = PI.toFloat() - angle
+            x = wallCoordinate
+            rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
+        } else {
+            angle = -angle
+            y = wallCoordinate
+            rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
+        }
     }
 }

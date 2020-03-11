@@ -32,6 +32,7 @@ class WeeTank : ApplicationAdapter() {
     private lateinit var target: Target
     private lateinit var enemies: Array<Enemy>
     private lateinit var bullets: Array<Bullet>
+    private lateinit var blocks: Array<Block>
     private val bulletsGroup = Group()
 
     override fun create() {
@@ -42,14 +43,16 @@ class WeeTank : ApplicationAdapter() {
 
         player = Player()
         stage.addActor(player)
-        enemies = arrayOf(EnemyType1(100f, 100f), EnemyType2(STAGE_WIDTH / 2, STAGE_HEIGHT / 2))
+        enemies = arrayOf(/*EnemyType1(100f, 100f), EnemyType2(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)*/)
         enemies.forEach {
             stage.addActor(it)
         }
         bullets = Array(50) { Bullet() }
         stage.addActor(bulletsGroup)
-        val block = Block(100f, 500f)
-        stage.addActor(block)
+        blocks = arrayOf(Block(100f, 100f), Block(100f, 200f), Block(100f, 300f), Block(200f, 100f))
+        blocks.forEach {
+            stage.addActor(it)
+        }
         target = Target()
         stage.addActor(target)
 
@@ -120,6 +123,25 @@ class WeeTank : ApplicationAdapter() {
                     it.remove()
                     println("bullets collide with each other")
                 }
+                blocks.find {
+                    it.hasParent() && bullet.rect.overlaps(it.rect)
+                }?.let {
+                    val a = ((bullet.y - it.y) / (bullet.x - it.x))
+                    val excess = 5
+                    if (a > -1 && a < 1) {
+                        if (bullet.x - it.x > 0) {
+                            bullet.reflect(true, it.x + it.width / 2 + excess)
+                        } else {
+                            bullet.reflect(true, it.x - it.width / 2 - excess)
+                        }
+                    } else {
+                        if (bullet.y - it.y > 0) {
+                            bullet.reflect(false, it.y + it.height / 2 + excess)
+                        } else {
+                            bullet.reflect(false, it.y - it.height / 2 - excess)
+                        }
+                    }
+                }
             }
         }
     }
@@ -132,6 +154,8 @@ class WeeTank : ApplicationAdapter() {
         player.dispose()
         enemies.forEach { it.dispose() }
         bullets.forEach { it.dispose() }
+        blocks.forEach { it.dispose() }
+        stage.dispose()
         batch.dispose()
         font.dispose()
     }

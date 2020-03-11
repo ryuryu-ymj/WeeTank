@@ -10,8 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor
  * PlayerやEnemyの親クラス
  */
 open class Tank : Actor() {
-    private val textureBody = Texture("tank_body.png")
-    private val textureGun = TextureRegion(Texture("tank_gun.png"))
+    companion object{
+        private val textureBody = Texture("tank_body.png")
+        private val textureGun = TextureRegion(Texture("tank_gun.png"))
+    }
 
     /** 衝突判定用の枠 */
     var rect = Rectangle()
@@ -45,6 +47,7 @@ open class Tank : Actor() {
     }
 
     fun dispose() {
+        clear()
         textureBody.dispose()
         textureGun.texture.dispose()
     }
