@@ -16,7 +16,7 @@ open class Tank : Actor() {
     }
 
     /** 衝突判定用の枠 */
-    var rect = Rectangle()
+    val rect = Rectangle()
 
     /** 弾を打つ方向<p>
      * 三時の方向から反時計回りにラジアン */
@@ -80,4 +80,25 @@ open class Tank : Actor() {
      * 弾を打てるか否か
      */
     fun canShoot() = (noShootTime > cantShootTime && bulletCnt != 0)
+
+    /**
+     * blockに触れているときに呼び出す
+     * @param block: 触れているblock
+     */
+    fun touchBlock(block: Block) {
+        val a = ((y - block.y) / (x - block.x))
+        if (a > -1 && a < 1) {
+            x = if (x - block.x > 0) {
+                block.x + block.width / 2 + rect.width / 2
+            } else {
+                block.x - block.width / 2 - rect.width / 2
+            }
+        } else {
+            y = if (y - block.y > 0) {
+                block.y + block.height / 2 + rect.height / 2
+            } else {
+                block.y - block.height / 2 - rect.height / 2
+            }
+        }
+    }
 }

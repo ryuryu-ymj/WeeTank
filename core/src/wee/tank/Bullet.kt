@@ -20,13 +20,11 @@ class Bullet : Actor() {
     /** 弾丸の方向 三時の方向から反時計回りにラジアン */
     var angle = 0f
         private set
-    var isReflected = false
+    private var isReflected = false
 
     init {
         width = texture.regionWidth.toFloat()
         height = texture.regionHeight.toFloat()
-
-        setPosition(STAGE_WIDTH / 2, STAGE_HEIGHT / 2)
     }
 
     fun dispose() {
@@ -45,6 +43,7 @@ class Bullet : Actor() {
         }
 
         rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
+        //print("($x, $y)")
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
@@ -60,24 +59,36 @@ class Bullet : Actor() {
      */
     fun activate(x: Float, y: Float, angle: Float) {
         setPosition(x, y)
+        rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
         this.angle = angle
         isReflected = false
     }
 
-    fun reflect(wallIsVertical: Boolean, wallCoordinate: Float) {
-        if (isReflected) {
+    fun reflect(block: Block) {
+        if (isReflected)
+        {
             remove()
-            return
+            isReflected = false
         }
-        if (wallIsVertical) {
+        val a = ((y - block.y) / (x - block.x))
+        val excess = 5
+        if (a > -1 && a < 1) {
+            x = if (x - block.x > 0) {
+                block.x + block.width / 2 + excess
+            } else {
+                block.x - block.width / 2 - excess
+            }
             angle = PI.toFloat() - angle
-            x = wallCoordinate
-            rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
         } else {
+            y = if (y - block.y > 0) {
+                block.y + block.height / 2 + excess
+            } else {
+                block.y - block.height / 2 - excess
+            }
             angle = -angle
-            y = wallCoordinate
-            rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
         }
+        rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
         isReflected = true
+        //println("reflect")
     }
 }

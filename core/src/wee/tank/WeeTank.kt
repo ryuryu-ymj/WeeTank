@@ -123,29 +123,25 @@ class WeeTank : ApplicationAdapter() {
                 }?.let {
                     bullet.remove()
                     it.remove()
-                    println("bullets collide with each other")
+                    //println("bullets collide with each other")
                 }
                 blocks.find {
-                    it.hasParent() && bullet.rect.overlaps(it.rect)
+                    bullet.rect.overlaps(it.rect)
                 }?.let {
-                    val a = ((bullet.y - it.y) / (bullet.x - it.x))
-                    val excess = 5
-                    if (a > -1 && a < 1) {
-                        if (bullet.x - it.x > 0) {
-                            bullet.reflect(true, it.x + it.width / 2 + excess)
-                        } else {
-                            bullet.reflect(true, it.x - it.width / 2 - excess)
-                        }
-                    } else {
-                        if (bullet.y - it.y > 0) {
-                            bullet.reflect(false, it.y + it.height / 2 + excess)
-                        } else {
-                            bullet.reflect(false, it.y - it.height / 2 - excess)
-                        }
-                    }
+                    bullet.reflect(it)
                 }
             }
         }
+
+        blocks.forEach { block ->
+            if (player.rect.overlaps(block.rect)) {
+                player.touchBlock(block)
+            }
+            enemies.find {
+                    it.hasParent() && it.rect.overlaps(block.rect)
+                }?.touchBlock(block)
+        }
+        //println()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -191,8 +187,9 @@ class WeeTank : ApplicationAdapter() {
             println("弾丸の数が足りず，生成できません")
             return
         }
-        bullet.activate(x + 60 * cos(angle), y + 60 * sin(angle), angle)
+        bullet.activate(x + 70 * cos(angle), y + 70 * sin(angle), angle)
         bulletsGroup.addActor(bullet)
+        //println("shoot ($x, $y)")
     }
 
     private fun readMission() {
