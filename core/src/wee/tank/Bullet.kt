@@ -20,6 +20,7 @@ class Bullet : Actor() {
     /** 弾丸の方向 三時の方向から反時計回りにラジアン */
     var angle = 0f
         private set
+    var isReflected = false
 
     init {
         width = texture.regionWidth.toFloat()
@@ -60,9 +61,14 @@ class Bullet : Actor() {
     fun activate(x: Float, y: Float, angle: Float) {
         setPosition(x, y)
         this.angle = angle
+        isReflected = false
     }
 
     fun reflect(wallIsVertical: Boolean, wallCoordinate: Float) {
+        if (isReflected) {
+            remove()
+            return
+        }
         if (wallIsVertical) {
             angle = PI.toFloat() - angle
             x = wallCoordinate
@@ -72,5 +78,6 @@ class Bullet : Actor() {
             y = wallCoordinate
             rect.set(x - width / 2 + 5, y - height / 2 + 5, width - 10, height - 10)
         }
+        isReflected = true
     }
 }
