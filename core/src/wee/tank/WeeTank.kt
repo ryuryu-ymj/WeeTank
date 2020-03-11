@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.viewport.FitViewport
 import kotlin.math.cos
 import kotlin.math.sin
@@ -32,7 +33,7 @@ class WeeTank : ApplicationAdapter() {
     private lateinit var target: Target
     private lateinit var enemies: Array<Enemy>
     private lateinit var bullets: Array<Bullet>
-    private lateinit var blocks: Array<Block>
+    private val blocks = ArrayList<Block>()
     private val bulletsGroup = Group()
 
     override fun create() {
@@ -49,10 +50,11 @@ class WeeTank : ApplicationAdapter() {
         }
         bullets = Array(50) { Bullet() }
         stage.addActor(bulletsGroup)
-        blocks = arrayOf(Block(100f, 100f), Block(100f, 200f), Block(100f, 300f), Block(200f, 100f))
+        /*blocks = arrayOf(Block(100f, 100f), Block(100f, 200f), Block(100f, 300f), Block(200f, 100f))
         blocks.forEach {
             stage.addActor(it)
-        }
+        }*/
+        readMission()
         target = Target()
         stage.addActor(target)
 
@@ -191,5 +193,28 @@ class WeeTank : ApplicationAdapter() {
         }
         bullet.activate(x + 60 * cos(angle), y + 60 * sin(angle), angle)
         bulletsGroup.addActor(bullet)
+    }
+
+    private fun readMission() {
+        try {
+            val file = Gdx.files.internal("stage1.txt")
+            var x: Float
+            var y = STAGE_HEIGHT - 130
+            file.reader().forEachLine { line ->
+                x = 60f
+                line.split(",").forEach { cell ->
+                    when (cell) {
+                        "00" -> Block(x, y).let {
+                            blocks.add(it)
+                            stage.addActor(it)
+                        }
+                    }
+                    x += 100
+                }
+                y -= 100
+            }
+        } catch (e: GdxRuntimeException) {
+            println("ファイルの読み取りに失敗しました ${e.message}")
+        }
     }
 }
