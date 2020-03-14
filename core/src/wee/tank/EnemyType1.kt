@@ -1,5 +1,6 @@
 package wee.tank
 
+import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -8,7 +9,7 @@ import kotlin.math.atan2
  * 固定砲台タイプのtank
  */
 class EnemyType1(x: Float, y: Float): Enemy(x, y) {
-    override fun decideTargetAndMovement(player: Player, bullets: List<Bullet>) {
+    override fun decideTargetAndMovement(player: Player, bullets: List<Bullet>, blocks: MutableList<Block>) {
         bullets.filter {
             it.hasParent()
         }.minBy {
@@ -31,11 +32,16 @@ class EnemyType1(x: Float, y: Float): Enemy(x, y) {
             }
         }
 
-        angle = atan2(player.y - y, player.x - x)
-        wantShoot = when {
-            wantShoot -> false
-            (0..300).random() == 0 -> true //ときたまplayerを狙ってくる
-            else -> false
+        if (!blocks.any {
+                    Intersector.intersectSegmentRectangle(Vector2(x, y), Vector2(player.x, player.y), it.rect)
+                }) {
+            //println("no obstacle")
+            angle = atan2(player.y - y, player.x - x)
+            wantShoot = when {
+                wantShoot -> false
+                (0..300).random() == 0 -> true //ときたまplayerを狙ってくる
+                else -> false
+            }
         }
     }
 }

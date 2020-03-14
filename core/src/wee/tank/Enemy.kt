@@ -34,5 +34,5 @@ abstract class Enemy(x: Float, y: Float) : Tank() {
     /**
      * playerやbulletの位置からtargetと動きを決める
      */
-    abstract fun decideTargetAndMovement(player: Player, bullets: List<Bullet>)
+    abstract fun decideTargetAndMovement(player: Player, bullets: List<Bullet>, blocks: MutableList<Block>)
 }

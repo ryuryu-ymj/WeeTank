@@ -98,7 +98,7 @@ class WeeTank : ApplicationAdapter() {
         //enemyが弾を打つ
         enemies.forEach {
             if (it.hasParent()) {
-                it.decideTargetAndMovement(player, bullets)
+                it.decideTargetAndMovement(player, bullets, blocks)
                 if (it.wantShoot && it.canShoot()) it.run {
                     newBullet(x, y, angle)
                     shoot()
@@ -194,7 +194,7 @@ class WeeTank : ApplicationAdapter() {
 
     private fun readMission() {
         try {
-            val file = Gdx.files.internal("stage1.txt")
+            val file = Gdx.files.internal("stage01.txt")
             for ((iy, line) in file.reader().readLines().withIndex()) {
                 for ((ix, cell) in line.chunked(2).withIndex()) {
                     val x = STAGE_WIDTH / 2 - 1100 + ix * 100f
@@ -205,6 +205,10 @@ class WeeTank : ApplicationAdapter() {
                             stage.addActor(it)
                         }
                         "20" -> EnemyType1(x, y).let {
+                            enemies.add(it)
+                            stage.addActor(it)
+                        }
+                        "21" -> EnemyType2(x, y).let {
                             enemies.add(it)
                             stage.addActor(it)
                         }

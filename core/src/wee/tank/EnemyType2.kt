@@ -1,10 +1,14 @@
 package wee.tank
 
+import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.atan2
 
+/**
+ * 移動普通タイプのtank
+ */
 class EnemyType2(x: Float, y: Float) : Enemy(x, y) {
-    override fun decideTargetAndMovement(player: Player, bullets: List<Bullet>) {
+    override fun decideTargetAndMovement(player: Player, bullets: List<Bullet>, blocks: MutableList<Block>) {
         bullets.filter {
             it.hasParent()
         }.minBy {
@@ -13,7 +17,6 @@ class EnemyType2(x: Float, y: Float) : Enemy(x, y) {
             val l = Vector2(x - bullet.x, y - bullet.y)
             val d = Vector2(1f, 0f).rotateRad(bullet.angle)
             val d2 = d.cpy().scl(l.dot(d))
-
             /** tankからbulletの弾道への垂線ベクトル */
             val h = d2.cpy().sub(l)
             if (h.len() < 70 && l.dot(d) > 0 && l.len() < 400) {
@@ -24,11 +27,15 @@ class EnemyType2(x: Float, y: Float) : Enemy(x, y) {
             }
         }
 
-        angle = atan2(player.y - y, player.x - x)
-        wantShoot = when {
-            wantShoot -> false
-            (0..200).random() == 0 -> true //ときたまplayerを狙ってくる
-            else -> false
+        if (!blocks.any {
+                    Intersector.intersectSegmentRectangle(Vector2(x, y), Vector2(player.x, player.y), it.rect)
+                }) {
+            angle = atan2(player.y - y, player.x - x)
+            wantShoot = when {
+                wantShoot -> false
+                (0..200).random() == 0 -> true //ときたまplayerを狙ってくる
+                else -> false
+            }
         }
 
         if (isReachDestination) {
