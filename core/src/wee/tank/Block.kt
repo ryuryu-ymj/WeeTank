@@ -5,11 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.scenes.scene2d.Actor
 
-class Block(x: Float, y: Float) : Actor() {
+class Block(x: Float, y: Float) : MyActor() {
     private val texture = Texture("block.png")
-
-    /** 衝突判定用の枠 */
-    var rect = Rectangle()
 
     init {
         /* 拡大・縮小時も滑らかにする. */
@@ -21,7 +18,7 @@ class Block(x: Float, y: Float) : Actor() {
         rect.set(x - width / 2, y - height / 2, width, height)
     }
 
-    fun dispose() {
+    override fun dispose() {
         clear()
         texture.dispose()
     }

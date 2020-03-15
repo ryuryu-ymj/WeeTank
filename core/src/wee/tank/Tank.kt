@@ -3,20 +3,15 @@ package wee.tank
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.scenes.scene2d.Actor
 
 /**
  * PlayerやEnemyの親クラス
  */
-open class Tank : Actor() {
+open class Tank : MyActor() {
     companion object {
         private val textureBody = Texture("tank_body.png")
         private val textureGun = TextureRegion(Texture("tank_gun.png"))
     }
-
-    /** 衝突判定用の枠 */
-    val rect = Rectangle()
 
     /** 弾を打つ方向<p>
      * 三時の方向から反時計回りにラジアン */
@@ -52,7 +47,7 @@ open class Tank : Actor() {
         height = textureBody.height.toFloat()
     }
 
-    fun dispose() {
+    override fun dispose() {
         clear()
         textureBody.dispose()
         textureGun.texture.dispose()
@@ -88,22 +83,22 @@ open class Tank : Actor() {
     fun canShoot() = (noShootTime > cantShootTime && bulletCnt != 0)
 
     /**
-     * blockに触れているときに呼び出す
-     * @param block: 触れているblock
+     * actorに触れているときに呼び出す
+     * @param Actor: 触れているactor
      */
-    fun touchBlock(block: Block) {
-        val a = ((y - block.y) / (x - block.x))
+    open fun touchActor(Actor: MyActor) {
+        val a = ((y - Actor.y) / (x - Actor.x))
         if (a > -1 && a < 1) {
-            x = if (x - block.x > 0) {
-                block.x + block.width / 2 + rect.width / 2
+            x = if (x - Actor.x > 0) {
+                Actor.x + Actor.rect.width / 2 + rect.width / 2
             } else {
-                block.x - block.width / 2 - rect.width / 2
+                Actor.x - Actor.rect.width / 2 - rect.width / 2
             }
         } else {
-            y = if (y - block.y > 0) {
-                block.y + block.height / 2 + rect.height / 2
+            y = if (y - Actor.y > 0) {
+                Actor.y + Actor.rect.height / 2 + rect.height / 2
             } else {
-                block.y - block.height / 2 - rect.height / 2
+                Actor.y - Actor.rect.height / 2 - rect.height / 2
             }
         }
     }

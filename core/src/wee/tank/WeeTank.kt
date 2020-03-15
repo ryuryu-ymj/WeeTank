@@ -16,8 +16,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import kotlin.math.cos
 import kotlin.math.sin
 
-const val STAGE_WIDTH = 3200f
-const val STAGE_HEIGHT = 1800f
+const val STAGE_WIDTH = 3520f
+const val STAGE_HEIGHT = 1980f
 
 class WeeTank : ApplicationAdapter() {
     private lateinit var stage: Stage
@@ -54,7 +54,7 @@ class WeeTank : ApplicationAdapter() {
         blocks.forEach {
             stage.addActor(it)
         }*/
-        readMission()
+        readStage(3)
         target = Target()
         stage.addActor(target)
 
@@ -95,7 +95,7 @@ class WeeTank : ApplicationAdapter() {
             }
         }
 
-        //enemyが弾を打つ
+        //enemyが動く
         enemies.forEach {
             if (it.hasParent()) {
                 it.decideTargetAndMovement(player, bullets, blocks)
@@ -107,41 +107,59 @@ class WeeTank : ApplicationAdapter() {
         }
 
         //衝突判定
-        bullets.forEach { bullet ->
+        bullets.forEach foreach@{ bullet ->
             if (bullet.hasParent()) {
                 enemies.find { it.hasParent() && bullet.rect.overlaps(it.rect) }?.let {
                     bullet.remove()
                     it.remove()
+                    return@foreach
                 }
                 if (player.hasParent() && player.rect.overlaps(bullet.rect)) {
                     bullet.remove()
                     player.remove()
                     println("player die")
+                    return@foreach
                 }
                 bullets.find {
                     it.hasParent() && it != bullet && bullet.rect.overlaps(it.rect)
                 }?.let {
                     bullet.remove()
                     it.remove()
+                    return@foreach
                     //println("bullets collide with each other")
                 }
                 blocks.find {
                     bullet.rect.overlaps(it.rect)
                 }?.let {
                     bullet.reflect(it)
+                    return@foreach
                 }
             }
         }
 
         blocks.forEach { block ->
             if (player.rect.overlaps(block.rect)) {
-                player.touchBlock(block)
+                player.touchActor(block)
             }
             enemies.find {
-                    it.hasParent() && it.rect.overlaps(block.rect)
-                }?.touchBlock(block)
+                it.hasParent() && it.rect.overlaps(block.rect)
+            }?.touchActor(block)
         }
-        //println()
+
+        enemies.forEach { enemy ->
+            if (enemy.hasParent()) {
+                if (player.hasParent() && player.rect.overlaps(enemy.rect)) {
+                    player.touchActor(enemy)
+                    enemy.touchActor(player)
+                }
+                enemies.find {
+                    it.hasParent() && it != enemy && it.rect.overlaps(enemy.rect)
+                }?.let {
+                    it.touchActor(enemy)
+                    enemy.touchActor(it)
+                }
+            }
+        }
     }
 
     override fun resize(width: Int, height: Int) {
@@ -192,27 +210,27 @@ class WeeTank : ApplicationAdapter() {
         //println("shoot ($x, $y)")
     }
 
-    private fun readMission() {
+    private fun readStage(stageNum: Int) {
         try {
-            val file = Gdx.files.internal("stage01.txt")
+            val file = Gdx.files.internal("stage${"%02d".format(stageNum)}.txt")
             for ((iy, line) in file.reader().readLines().withIndex()) {
-                for ((ix, cell) in line.chunked(2).withIndex()) {
+                for ((ix, cell) in line.split(",").withIndex()) {
                     val x = STAGE_WIDTH / 2 - 1100 + ix * 100f
-                    val y = STAGE_HEIGHT / 2 + 800 - iy * 100f
+                    val y = STAGE_HEIGHT / 2 + 900 - iy * 100f
                     when (cell) {
-                        "01" -> Block(x, y).let {
+                        "b" -> Block(x, y).let {
                             blocks.add(it)
                             stage.addActor(it)
                         }
-                        "20" -> EnemyType1(x, y).let {
+                        "0" -> EnemyType1(x, y).let {
                             enemies.add(it)
                             stage.addActor(it)
                         }
-                        "21" -> EnemyType2(x, y).let {
+                        "1" -> EnemyType2(x, y).let {
                             enemies.add(it)
                             stage.addActor(it)
                         }
-                        "10" -> player.let {
+                        "p" -> player.let {
                             it.init(x, y)
                             stage.addActor(it)
                         }

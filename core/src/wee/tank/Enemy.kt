@@ -34,14 +34,22 @@ abstract class Enemy(x: Float, y: Float) : Tank() {
         super.act(delta)
     }
 
+    override fun touchActor(Actor: MyActor) {
+        super.touchActor(Actor)
+        destination.set(x, y)
+    }
+
     /**
      * playerやbulletの位置からtargetと動きを決める
      */
     abstract fun decideTargetAndMovement(player: Player, bullets: List<Bullet>, blocks: MutableList<Block>)
 
+    /**
+     * ラムダムに決められた回数おきにtrueを返す
+     * @param chance 大きいほどtrueが帰ってくる確率が高い．1以上
+     */
     protected fun getTrueSometimes(chance: Int): Boolean {
         cnt -= chance
-        println(cnt)
         if (cnt < 0) {
             cnt = (240..480).random()
             return true
