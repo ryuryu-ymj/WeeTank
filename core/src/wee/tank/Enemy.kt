@@ -11,6 +11,7 @@ abstract class Enemy(x: Float, y: Float) : Tank() {
     var isReachDestination = true
         get() = destination.epsilonEquals(x, y)
         private set
+    private var cnt = (60..180).random()
 
     init {
         setPosition(x, y)
@@ -35,4 +36,14 @@ abstract class Enemy(x: Float, y: Float) : Tank() {
      * playerやbulletの位置からtargetと動きを決める
      */
     abstract fun decideTargetAndMovement(player: Player, bullets: List<Bullet>, blocks: MutableList<Block>)
+
+    protected fun getTrueSometimes(chance: Int): Boolean {
+        cnt -= chance
+        println(cnt)
+        if (cnt < 0) {
+            cnt = (240..480).random()
+            return true
+        }
+        return false
+    }
 }

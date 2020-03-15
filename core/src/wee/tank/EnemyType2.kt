@@ -20,7 +20,7 @@ class EnemyType2(x: Float, y: Float) : Enemy(x, y) {
             /** tankからbulletの弾道への垂線ベクトル */
             val h = d2.cpy().sub(l)
             if (h.len() < 70 && l.dot(d) > 0 && l.len() < 400) {
-                if ((0..15).random() == 0) {
+                if (getTrueSometimes(7)) {
                     destination = Vector2(x, y).sub(h.setLength(h.len() - 70)) //最も近くかつ当たる弾をよける
                 }
                 return
@@ -33,13 +33,13 @@ class EnemyType2(x: Float, y: Float) : Enemy(x, y) {
             angle = atan2(player.y - y, player.x - x)
             wantShoot = when {
                 wantShoot -> false
-                (0..200).random() == 0 -> true //ときたまplayerを狙ってくる
+                getTrueSometimes(1) -> true //ときたまplayerを狙ってくる
                 else -> false
             }
         }
 
         if (isReachDestination) {
-            if ((0..100).random() == 0)
+            if (getTrueSometimes(2))
             {
                 destination.add(100f * (-2..2).random(), 100f * (-2..2).random()) // 適当に動く
             }
