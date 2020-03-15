@@ -15,7 +15,7 @@ class Bullet : Actor() {
     }
 
     /** 衝突判定用の枠 */
-    var rect = Rectangle()
+    val rect = Rectangle()
 
     /** 弾丸の方向 三時の方向から反時計回りにラジアン */
     var angle = 0f
@@ -65,8 +65,7 @@ class Bullet : Actor() {
     }
 
     fun reflect(block: Block) {
-        if (isReflected)
-        {
+        if (isReflected) {
             remove()
             isReflected = false
         }

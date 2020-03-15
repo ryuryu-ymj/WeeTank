@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
  * PlayerやEnemyの親クラス
  */
 open class Tank : Actor() {
-    companion object{
+    companion object {
         private val textureBody = Texture("tank_body.png")
         private val textureGun = TextureRegion(Texture("tank_gun.png"))
     }
@@ -21,17 +21,23 @@ open class Tank : Actor() {
     /** 弾を打つ方向<p>
      * 三時の方向から反時計回りにラジアン */
     var angle = 0f
+        protected set
 
     /** 弾の最大装填数 */
     private val bulletCntMax = 5
+
     /** 弾を打った後，次打てるまでの時間 */
     private val cantShootTime = 10
+
     /** 弾の装填にかかる時間 */
     private val recoverBulletTime = 30
+
     /** 移動速度 */
     val moveSpeed = 3
+
     /** 直近の弾を打ってからの経過時間 */
     private var noShootTime = 0
+
     /**
      * 所持する弾の数<p>
      * 一定時間打たないと回復する

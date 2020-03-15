@@ -5,9 +5,11 @@ import com.badlogic.gdx.math.Vector2
 abstract class Enemy(x: Float, y: Float) : Tank() {
     /** 弾を発射したいか否か */
     var wantShoot = false
+        protected set
 
     /** 目的地 */
     var destination = Vector2()
+        protected set
     var isReachDestination = true
         get() = destination.epsilonEquals(x, y)
         private set
